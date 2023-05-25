@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Requisições assincronas</title>
+
+  <script>
+    function getCEP() {
+      const txt = document.getElementById("search")
+      const labels = document.getElementsByTagName("label")
+      const url = 'https://viacep.com.br/ws/'
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", url.concat(`${txt.value}/json/`), true);
+      xhr.onload = function(e) {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            console.log(xhr.responseText)
+            const obj = JSON.parse(xhr.responseText);
+            labels[0].innerText = 'cep: ' + obj.cep
+            labels[1].innerText = 'logradouro: ' + obj.logradouro
+            labels[2].innerText = 'complemento: ' + obj.complemento
+            labels[3].innerText = 'bairro: ' + obj.bairro
+            labels[4].innerText = 'localidade: ' + obj.localidade
+            labels[5].innerText = 'uf: ' + obj.uf
+            labels[6].innerText = 'ibge: ' + obj.ibge
+            labels[7].innerText = 'gia: ' + obj.gia
+            labels[8].innerText = 'ddd: ' + obj.ddd
+            labels[9].innerText = 'siafi: ' + obj.siafi
+          } else {
+            labels[0].innerText = 'erro: ' + xhr.statusText
+          }
+        }
+      };
+      xhr.onerror = function(e) {
+        labels[0].innerText = 'erro: ' + xhr.statusText
+      };
+      xhr.send(null);
+    }
+  </script>
+
+</head>
+<body>
+  <form>
+    <input id="search" type="search"  />
+    <button type="button" onclick="getCEP()">Pesquisar</button>
+  </form>
+
+  <div id="endereco">
+    <p><label id='cep'></label></p>
+    <p><label id='logradouro'></label></p>
+    <p><label id='complemento'></label></p>
+    <p><label id='bairro'></label></p>
+    <p><label id='localidade'></label></p>
+    <p><label id='uf'></label></p>
+    <p><label id='ibge'></label></p>
+    <p><label id='gia'></label></p>
+    <p><label id='ddd'></label></p>
+    <p><label id='siafi'></label></p>
+  </div>
+    
+</body>
+</html>
